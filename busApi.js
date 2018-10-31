@@ -32,7 +32,13 @@
       console.log(c);
       var d = c.join("");
       console.log(d);
-    //  let output = '<div class="card-columns">';
+      // var d4 = b.slice(14,16);
+      // var d5 = d4.join("");
+      // console.log(d5);
+
+      duetime = text.results[0].duetime;
+      console.log(duetime);
+      let output = '<div class="card-columns">';
 
     //   for (var i = 0; i < 10; i++) {
     //     output += `
@@ -52,11 +58,16 @@
 
     //         </div><br/>`;
     //   }
-    //   output += "</div>";
-    //   document.getElementById("results").innerHTML = output;
+    output += `Next bus will arrive in ${duetime} minutes`;
+       output += "</div>";
+       document.getElementById("results").innerHTML = output;
      })
     .catch(err => console.log(err));
 // }
+
+
+//add a function for specific stop id and route number I am looking for
+
 
 // function nextpage() {
 //   PageNumber++;
