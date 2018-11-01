@@ -1,74 +1,74 @@
-// var PageNumber = 0;
-var BusTime=[];
+var BusTime = [];
+
 function StopNumber(stopidValue, routeNo, stopidName) {
-//   var SearchTerm = document.getElementById("searchinput").value;
-//   let url = ``;
-//   if (SearchTerm === "") {
-//     url = `https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=d8eb6e8f3a54495396f7db53263f216e&page=${PageNumber}`;
-//   } else {
-//     url = `https://api.nytimes.com/svc/search/v2/articlesearch.json?api-key=d8eb6e8f3a54495396f7db53263f216e&page=${PageNumber}&q=${SearchTerm}`;
-//   }
   url = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`;
-  console.log(`https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`);
+  console.log(
+    `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`
+  );
   fetch(url)
     .then(function(response) {
       return response.json();
     })
     .then(function(text) {
       resultArray = 0;
-      if( routeNo != "multiple"){
-      var numberOfResults = text.numberofresults; 
-      for(var i = 0; i< numberOfResults; i++){
-        var route = (text.results[i].route);
-        //console.log("The current route is " + route);
-        if (route == routeNo){
-          resultArray = i;
-          //console.log("WOOOOOOW");
-          break;
+      if (routeNo != "multiple") {
+        var numberOfResults = text.numberofresults;
+        for (var i = 0; i < numberOfResults; i++) {
+          var route = text.results[i].route;
+          //console.log("The current route is " + route);
+          if (route == routeNo) {
+            resultArray = i;
+            //console.log("WOOOOOOW");
+            break;
+          }
         }
       }
-    }
-    
-
 
       console.log("timestamp " + text.timestamp);
-      var route = (text.results[resultArray].route);
+      var route = text.results[resultArray].route;
       console.log(text.results[resultArray].arrivaldatetime);
-      var a =text.results[resultArray].arrivaldatetime;
+      var a = text.results[resultArray].arrivaldatetime;
       var b = a.split("");
       // console.log(b);
-      var c = b.slice(11,19);
+      var c = b.slice(11, 19);
       // console.log(c);
       var d = c.join("");
       console.log(d);
       duetime = text.results[resultArray].duetime;
-      if (duetime == "Due"){
+      if (duetime == "Due") {
         duetime = 0;
       }
       console.log(duetime);
       var crate_img = document.createElement("img");
-      crate_img.setAttribute('src', 'images/busImage.jpg'); 
+      crate_img.setAttribute("src", "images/busImage.jpg");
       //crate_img.setAttribute('marginleft', duetime * 15);
-      var marginLeftTest = duetime * 20 + 'px';
+      var marginLeftTest = duetime * 20 + "px";
       console.log("testing margins " + marginLeftTest);
       crate_img.style.marginLeft = marginLeftTest;
       document.getElementById("results").appendChild(crate_img);
 
-       var page3 = document.createElement("div");
-       if (duetime == 0){
-        var t = document.createTextNode("Next bus " + route + " is now Due " + "from " + stopidName);
-       }
-       else{
-       var t = document.createTextNode("Next bus " + route + " is due in " + duetime + " minutes from " + stopidName);
-       }
-       page3.setAttribute('id', duetime);
-       page3.appendChild(t);
-       document.getElementById("results").appendChild(page3);
-       duetimeNumber = parseInt(duetime);
-       BusTime.push([duetimeNumber, stopidValue]);
-       //BusTime.push(duetimeNumber);
-
-     })
+      var page3 = document.createElement("div");
+      if (duetime == 0) {
+        var t = document.createTextNode(
+          "Next bus " + route + " is now Due " + "from " + stopidName
+        );
+      } else {
+        var t = document.createTextNode(
+          "Next bus " +
+            route +
+            " is due in " +
+            duetime +
+            " minutes from " +
+            stopidName
+        );
+      }
+      page3.setAttribute("id", duetime);
+      page3.appendChild(t);
+      document.getElementById("results").appendChild(page3);
+      duetimeNumber = parseInt(duetime);
+      BusTime.push([duetimeNumber, stopidValue, stopidName]);
+      //BusTime.push(duetimeNumber);
+    })
     .catch(err => console.log(err));
 }
 console.log(BusTime);
@@ -85,35 +85,44 @@ StopNumber(497, 14, "Opposite to Connoly Station");
 StopNumber(297, 14, "14 near the river Liffey");
 //add a function for specific stop id and route number I am looking for
 
-window.onload=function(){
-document.getElementById("nextBus").addEventListener("click", nextBus);
-}
+window.onload = function() {
+  document.getElementById("nextBus").addEventListener("click", nextBus);
+};
 
-function nextBus(){
-  BusTime.sort(function(a,b){
+function nextBus() {
+  var list = document.getElementById("results");
+  console.log("================");
+  console.log("TOTAL VALUES " + list.childNodes.length);
+  console.log("================");
+  //for(var i =0; i<list.childNodes.length;i++){
+  //list.removeChild(list.childNodes);
+  //}
+  while (list.firstChild) {
+    list.removeChild(list.firstChild);
+  }
+  BusTime.sort(function(a, b) {
     return a[0] - b[0];
     //return a - b;
-  })
+  });
   console.log(BusTime);
-  for(i=0; i<BusTime.length; i++){
+  for (i = 0; i < BusTime.length; i++) {
     var elmnt = document.createElement("div");
-    var textnode = document.createTextNode(BusTime[i][0]);
+    var textnode = document.createTextNode(
+      "Next bus is due in " + BusTime[i][0] + " minutes at " + BusTime[i][2]
+    );
 
-// Append the text node to <li>
-elmnt.appendChild(textnode);
+    // Append the text node to <li>
+    elmnt.appendChild(textnode);
 
-// Get the <ul> element with id="myList"
-var item = document.getElementById("results");
-
-// Replace the first child node (<li> with index 0) in <ul> with the newly created <li> element
-item.replaceChild(elmnt, item.childNodes[i]);
-
+    // Get the <ul> element with id="myList"
+    // var item = document.getElementById("results");
+    document.getElementById("results").appendChild(elmnt);
+    // // Replace the first child node (<li> with index 0) in <ul> with the newly created <li> element
+    // item.replaceChild(elmnt, item.childNodes[i]);
   }
 }
 
-
 // test(1359,16);
-
 
 // function test(stopidValue, value2){
 //   url = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`;
