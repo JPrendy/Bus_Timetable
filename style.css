@@ -6,3 +6,8 @@ h1{
     text-align: center;
     background-color:#edc202;
 }
+
+img{
+    height: 50px;
+    width: 50px;
+}
