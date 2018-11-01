@@ -94,3 +94,33 @@ item.replaceChild(elmnt, item.childNodes[i]);
 
   }
 }
+
+
+test(1359,16);
+
+
+function test(stopidValue, value2){
+  url = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`;
+  var hello = 0;
+  fetch(url)
+  .then(function(response) {
+    return response.json();
+  })
+  .then(function(text) {
+  var numberOfResults = text.numberofresults; //gets the number od results loaded from the json file.
+  console.log("no of results" + numberOfResults);
+  for(var i = 0; i< numberOfResults; i++){
+  var route = (text.results[i].route);
+  //console.log("The current route is " + route);
+  if (route == value2){
+    hello = i;
+    //console.log("WOOOOOOW");
+    break;
+  }
+}
+console.log("================");
+console.log("The next bus that is " + value2 + " " + hello);
+console.log("================");
+  })
+.catch(err => console.log(err));
+}
