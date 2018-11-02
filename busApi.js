@@ -5,8 +5,12 @@ function StopNumber(stopidValue, routeNo, stopidName) {
   console.log(
     `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`
   );
+  test2();//this will show the spinner icon 
   fetch(url)
     .then(function(response) {
+
+    test2(); //this will remove the spinner icon
+
       return response.json();
     })
     .then(function(text) {
@@ -39,18 +43,25 @@ function StopNumber(stopidValue, routeNo, stopidName) {
         duetime = 0;
       }
       console.log(duetime);
+
+      var createDiv= document.createElement("div");
+      createDiv.setAttribute("class", "busSquare");
+      createDiv.setAttribute("id", stopidValue);
+      document.getElementById("results").appendChild(createDiv);
+
       var crate_img = document.createElement("img");
-      crate_img.setAttribute("src", "images/busImage.jpg");
+      crate_img.setAttribute("src", "images/busImage2.png");
       //crate_img.setAttribute('marginleft', duetime * 15);
       var marginLeftTest = duetime * 20 + "px";
       console.log("testing margins " + marginLeftTest);
       crate_img.style.marginLeft = marginLeftTest;
-      document.getElementById("results").appendChild(crate_img);
+      document.getElementById(stopidValue).appendChild(crate_img);
 
       var page3 = document.createElement("div");
+      page3.setAttribute("id", stopidValue + "text");
       if (duetime == 0) {
         var t = document.createTextNode(
-          "Next bus " + route + " is now Due " + "from " + stopidName
+          "Next bus " + route + " is now Due from " + stopidName  + " / "
         );
       } else {
         var t = document.createTextNode(
@@ -59,14 +70,31 @@ function StopNumber(stopidValue, routeNo, stopidName) {
             " is due in " +
             duetime +
             " minutes from " +
-            stopidName
+            stopidName + " / "
         );
       }
-      page3.setAttribute("id", duetime);
+      //page3.setAttribute("id", duetime);
       page3.appendChild(t);
-      document.getElementById("results").appendChild(page3);
+      document.getElementById(stopidValue).appendChild(page3);
+
+
+      var a = document.createElement("a");
+      var linkText = document.createTextNode("For a full rundown ");
+      a.appendChild(linkText);
+      a.setAttribute("target", "_blank");
+      a.href = `https://www.dublinbus.ie/RTPI/Sources-of-Real-Time-Information/?searchtype=view&searchquery=${stopidValue}`;
+      document.getElementById(stopidValue + "text").appendChild(a);
+
+
+
+
+
+
+
+
+
       duetimeNumber = parseInt(duetime);
-      BusTime.push([duetimeNumber, stopidValue, stopidName]);
+      BusTime.push([duetimeNumber, route, stopidValue, stopidName]);
       //BusTime.push(duetimeNumber);
     })
     .catch(err => console.log(err));
@@ -106,20 +134,45 @@ function nextBus() {
   });
   console.log(BusTime);
   for (i = 0; i < BusTime.length; i++) {
-    var elmnt = document.createElement("div");
-    var textnode = document.createTextNode(
-      "Next bus is due in " + BusTime[i][0] + " minutes at " + BusTime[i][2]
-    );
+    var createDiv= document.createElement("div");
+    createDiv.setAttribute("class", "busSquare");
+    createDiv.setAttribute("id", BusTime[i][2]);
+    document.getElementById("results").appendChild(createDiv);
 
+    var crate_img = document.createElement("img");
+    crate_img.setAttribute("src", "images/busImage2.png");
+    //crate_img.setAttribute('marginleft', duetime * 15);
+    var marginLeftTest =  BusTime[i][0] * 20 + "px";
+    console.log("testing margins " + marginLeftTest);
+    crate_img.style.marginLeft = marginLeftTest;
+    document.getElementById( BusTime[i][2]).appendChild(crate_img);
+
+
+    var elmnt = document.createElement("div");
+    if(BusTime[i][0] == 0){
+      var textnode = document.createTextNode(
+        "Next bus " + BusTime[i][1] + " is now Due from " + BusTime[i][3]
+      );
+
+    }
+    else{
+    var textnode = document.createTextNode(
+      "Next bus " + BusTime[i][1] + " is due in " + BusTime[i][0] + " minutes from " + BusTime[i][3]
+    );
+    }
     // Append the text node to <li>
     elmnt.appendChild(textnode);
 
     // Get the <ul> element with id="myList"
     // var item = document.getElementById("results");
-    document.getElementById("results").appendChild(elmnt);
+    document.getElementById( BusTime[i][2]).appendChild(elmnt);
     // // Replace the first child node (<li> with index 0) in <ul> with the newly created <li> element
     // item.replaceChild(elmnt, item.childNodes[i]);
   }
+}
+
+function test2(){
+  console.log("hello2");
 }
 
 // test(1359,16);
