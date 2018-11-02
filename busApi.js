@@ -5,12 +5,14 @@ function StopNumber(stopidValue, routeNo, stopidName) {
   console.log(
     `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`
   );
-  test2();//this will show the spinner icon 
   fetch(url)
     .then(function(response) {
 
-    test2(); //this will remove the spinner icon
-
+     //this will remove the spinner icon
+    var x = document.getElementById("loading");
+    if(x != null){
+    document.getElementById("loading").remove();
+    }
       return response.json();
     })
     .then(function(text) {
@@ -59,23 +61,43 @@ function StopNumber(stopidValue, routeNo, stopidName) {
 
       var page3 = document.createElement("div");
       page3.setAttribute("id", stopidValue + "text");
-      if (duetime == 0) {
-        var t = document.createTextNode(
-          "Next bus " + route + " is now Due from " + stopidName  + " / "
-        );
-      } else {
-        var t = document.createTextNode(
-          "Next bus " +
-            route +
-            " is due in " +
-            duetime +
-            " minutes from " +
-            stopidName + " / "
-        );
-      }
+      // if (duetime == 0) {
+      //   var t = document.createTextNode(
+      //     "Next bus " + route + " is now Due from " + stopidName  + " / "
+      //   );
+      // } else {
+      //   var t = document.createTextNode(
+      //     "Next bus " +
+      //       route +
+      //       " is due in " +
+      //       duetime +
+      //       " minutes from " +
+      //       stopidName + " / "
+      //   );
+      // }
       //page3.setAttribute("id", duetime);
-      page3.appendChild(t);
+      //page3.appendChild(t);
       document.getElementById(stopidValue).appendChild(page3);
+//////
+if (duetime == 0) {
+  document.getElementById(stopidValue + "text").innerHTML = "Next bus " +
+  "<b>" + route + "</b>" +
+  " is now Due from " +
+  "<b>" +  stopidName + "</b>" + " / ";
+}
+else{
+document.getElementById(stopidValue + "text").innerHTML = "Next bus " +
+      "<b>" + route + "</b>" +
+      " is due in " +
+      "<b>" + duetime + "</b>" +
+      " minutes from " +
+      "<b>" +  stopidName + "</b>" + " / ";
+}
+
+
+
+  
+   // document.getElementById(stopidValue + "text").innerHTML = " <b>minutes</b> from" + stopidName;
 
 
       var a = document.createElement("a");
@@ -115,6 +137,15 @@ StopNumber(297, 14, "14 near the river Liffey");
 
 window.onload = function() {
   document.getElementById("nextBus").addEventListener("click", nextBus);
+  
+  //add a spinner in here then have a condition that removes it from when the fetched worked
+  var crate_img4 = document.createElement("img");
+  crate_img4.setAttribute("src", "images/loading.gif");
+  crate_img4.setAttribute("id", "loading");
+  document.getElementById("results").appendChild(crate_img4);
+  console.log(crate_img4);
+
+
 };
 
 function nextBus() {
@@ -172,8 +203,18 @@ function nextBus() {
 }
 
 function test2(){
-  console.log("hello2");
+  // var crate_img4 = document.createElement("img");
+  // crate_img4.setAttribute("src", "images/busImage2.png");
+  // document.getElementById("results").appendChild(crate_img4);
+  // console.log(crate_img4);
 }
+
+function test3(){
+  // var list = document.getElementById("results");
+  // while (list.firstChild) {
+  //   list.removeChild(list.firstChild);
+  }
+
 
 // test(1359,16);
 
