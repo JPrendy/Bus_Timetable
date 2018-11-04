@@ -1,6 +1,6 @@
 var BusTime = [];
 
-function StopNumber(stopidValue, routeNo, stopidName) {
+function StopNumber(stopidValue, routeNo, stopidName, lat, long) {
   url = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`;
   console.log(
     `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`
@@ -80,15 +80,15 @@ function StopNumber(stopidValue, routeNo, stopidName) {
       document.getElementById(stopidValue).appendChild(page3);
 //////
 if (duetime == 0) {
-  document.getElementById(stopidValue + "text").innerHTML = "Next bus " +
+  document.getElementById(stopidValue + "text").innerHTML = "Next " +
   "<b>" + route + "</b>" +
-  " is now Due from " +
+  " bus is now <b>Due</b> from " +
   "<b>" +  stopidName + "</b>" + " / ";
 }
 else{
-document.getElementById(stopidValue + "text").innerHTML = "Next bus " +
+document.getElementById(stopidValue + "text").innerHTML = "Next " +
       "<b>" + route + "</b>" +
-      " is due in " +
+      "  bus  is due in " +
       "<b>" + duetime + "</b>" +
       " minutes from " +
       "<b>" +  stopidName + "</b>" + " / ";
@@ -125,14 +125,14 @@ console.log(BusTime);
 
 //push the times to an array then when the button is pressed we sort the array then we append the new list to the html
 //maybe add a link to the website
-StopNumber(213, "multiple", "Bus near Airport Takeaway");
-StopNumber(1190, 14, "Outside My Home");
-StopNumber(236, "multiple", "Funeral Parlour");
-StopNumber(1359, 16, "Dame Street (16)");
-StopNumber(7582, 14, "Dame Street (14)");
-StopNumber(278, 16, "O Connell Street (16)");
-StopNumber(497, 14, "Opposite to Connoly Station");
-StopNumber(297, 14, "14 near the river Liffey");
+StopNumber(213, "multiple", "Bus near Airport Takeaway", 53.38140194, -6.244888056);
+StopNumber(1190, 14, "Outside My Home", 53.38015806, -6.235771111);
+StopNumber(236, "multiple", "Funeral Parlour", 53.38202806, -6.238146944);
+StopNumber(1359, 16, "Dame Street (16)", 53.34441806, -6.261423056);
+StopNumber(7582, 14, "Dame Street (14)", 53.34432306, -6.262591111);
+StopNumber(278, 16, "O Connell Street (16)", 53.35162806, -6.261236944);
+StopNumber(497, 14, "Opposite to Connoly Station", 53.35050306, -6.250701111);
+StopNumber(297, 14, "14 near the river Liffey",53.34811611, -6.256768889);
 //add a function for specific stop id and route number I am looking for
 
 window.onload = function() {
@@ -194,52 +194,16 @@ function nextBus() {
     // Append the text node to <li>
     elmnt.appendChild(textnode);
 
-    // Get the <ul> element with id="myList"
-    // var item = document.getElementById("results");
     document.getElementById( BusTime[i][2]).appendChild(elmnt);
-    // // Replace the first child node (<li> with index 0) in <ul> with the newly created <li> element
-    // item.replaceChild(elmnt, item.childNodes[i]);
+
+    var a = document.createElement("a");
+    var linkText = document.createTextNode("For a full rundown ");
+    a.appendChild(linkText);
+    a.setAttribute("target", "_blank");
+    a.href = `https://www.dublinbus.ie/RTPI/Sources-of-Real-Time-Information/?searchtype=view&searchquery=${BusTime[i][2]}`;
+    document.getElementById( BusTime[i][2]).appendChild(a);
   }
 }
 
-function test2(){
-  // var crate_img4 = document.createElement("img");
-  // crate_img4.setAttribute("src", "images/busImage2.png");
-  // document.getElementById("results").appendChild(crate_img4);
-  // console.log(crate_img4);
-}
-
-function test3(){
-  // var list = document.getElementById("results");
-  // while (list.firstChild) {
-  //   list.removeChild(list.firstChild);
-  }
 
 
-// test(1359,16);
-
-// function test(stopidValue, value2){
-//   url = `https://data.smartdublin.ie/cgi-bin/rtpi/realtimebusinformation?stopid=${stopidValue}&format=json`;
-//   var hello = 0;
-//   fetch(url)
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(text) {
-//   var numberOfResults = text.numberofresults; //gets the number od results loaded from the json file.
-//   console.log("no of results" + numberOfResults);
-//   for(var i = 0; i< numberOfResults; i++){
-//   var route = (text.results[i].route);
-//   //console.log("The current route is " + route);
-//   if (route == value2){
-//     hello = i;
-//     //console.log("WOOOOOOW");
-//     break;
-//   }
-// }
-// console.log("================");
-// console.log("The next bus that is " + value2 + " " + hello);
-// console.log("================");
-//   })
-// .catch(err => console.log(err));
-// }
