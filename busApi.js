@@ -116,7 +116,7 @@ document.getElementById(stopidValue + "text").innerHTML = "Next " +
 
 
       duetimeNumber = parseInt(duetime);
-      BusTime.push([duetimeNumber, route, stopidValue, stopidName]);
+      BusTime.push([duetimeNumber, route, stopidValue, stopidName, lat, long]);
       //BusTime.push(duetimeNumber);
     })
     .catch(err => console.log(err));
