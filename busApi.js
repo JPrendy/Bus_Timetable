@@ -61,22 +61,6 @@ function StopNumber(stopidValue, routeNo, stopidName, lat, long) {
 
       var page3 = document.createElement("div");
       page3.setAttribute("id", stopidValue + "text");
-      // if (duetime == 0) {
-      //   var t = document.createTextNode(
-      //     "Next bus " + route + " is now Due from " + stopidName  + " / "
-      //   );
-      // } else {
-      //   var t = document.createTextNode(
-      //     "Next bus " +
-      //       route +
-      //       " is due in " +
-      //       duetime +
-      //       " minutes from " +
-      //       stopidName + " / "
-      //   );
-      // }
-      //page3.setAttribute("id", duetime);
-      //page3.appendChild(t);
       document.getElementById(stopidValue).appendChild(page3);
 //////
 if (duetime == 0) {
@@ -137,7 +121,8 @@ StopNumber(297, 14, "14 near the river Liffey",53.34811611, -6.256768889);
 
 window.onload = function() {
   document.getElementById("nextBus").addEventListener("click", nextBus);
-  
+  document.getElementById("nearestBus").addEventListener("click", getLocation);
+
   //add a spinner in here then have a condition that removes it from when the fetched worked
   var crate_img4 = document.createElement("img");
   crate_img4.setAttribute("src", "images/loading.gif");
@@ -180,30 +165,120 @@ function nextBus() {
 
 
     var elmnt = document.createElement("div");
-    if(BusTime[i][0] == 0){
-      var textnode = document.createTextNode(
-        "Next bus " + BusTime[i][1] + " is now Due from " + BusTime[i][3]
-      );
+    elmnt.setAttribute("id", BusTime[i][2] + "text");
+    document.getElementById(BusTime[i][2]).appendChild(elmnt);
 
-    }
-    else{
-    var textnode = document.createTextNode(
-      "Next bus " + BusTime[i][1] + " is due in " + BusTime[i][0] + " minutes from " + BusTime[i][3]
-    );
-    }
-    // Append the text node to <li>
-    elmnt.appendChild(textnode);
+    if(BusTime[i][0] == 0) {
+        document.getElementById(BusTime[i][2] + "text").innerHTML = "Next " +
+        "<b>" + BusTime[i][1] + "</b>" +
+        " bus is now <b>Due</b> from " +
+        "<b>" + BusTime[i][3] + "</b>" + " / ";
+      }
+      else{
+      document.getElementById(BusTime[i][2] + "text").innerHTML = "Next " +
+            "<b>" + BusTime[i][1] + "</b>" +
+            "  bus  is due in " +
+            "<b>" + BusTime[i][0] + "</b>" +
+            " minutes from " +
+            "<b>" +  BusTime[i][3] + "</b>" + " / ";
+      }
+      
 
-    document.getElementById( BusTime[i][2]).appendChild(elmnt);
+
 
     var a = document.createElement("a");
     var linkText = document.createTextNode("For a full rundown ");
     a.appendChild(linkText);
     a.setAttribute("target", "_blank");
     a.href = `https://www.dublinbus.ie/RTPI/Sources-of-Real-Time-Information/?searchtype=view&searchquery=${BusTime[i][2]}`;
-    document.getElementById( BusTime[i][2]).appendChild(a);
+    document.getElementById( BusTime[i][2] + "text").appendChild(a);
   }
 }
+
+function getLocation() {
+  if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+      console.log("Geolocation is not supported by this browser.");
+  }
+}
+
+var _eQuatorialEarthRadius = 6378.1370;
+var _d2r = (Math.PI / 180.0);
+var nearestBus = [];
+
+function showPosition(position) {
+  var list = document.getElementById("results");
+  var lat1 = position.coords.latitude;
+  var long1 = position.coords.longitude;
+  console.log(lat1, long1);
+  console.log(BusTime);
+  for (i = 0; i < BusTime.length; i++) {
+      var lat2 = BusTime[i][4];
+      var long2 = BusTime[i][5];
+
+      var dlong = (long2 - long1) * _d2r;
+      var dlat = (lat2 - lat1) * _d2r;
+      var a = Math.pow(Math.sin(dlat / 2.0), 2.0) + Math.cos(lat1 * _d2r) * Math.cos(lat2 * _d2r) * Math.pow(Math.sin(dlong / 2.0), 2.0);
+      var c = 2.0 * Math.atan2(Math.sqrt(a), Math.sqrt(1.0 - a));
+      var d = _eQuatorialEarthRadius * c;
+
+      nearestBus.push([d, BusTime[i][0], BusTime[i][1], BusTime[i][3], BusTime[i][2]]);
+  }
+  console.log(nearestBus);
+  nearestBus.sort(function(a, b) {
+      return a[0] - b[0];
+      //return a - b;
+    });
+    console.log(nearestBus[0][0], nearestBus[0][1], nearestBus[0][2], nearestBus[0][3], nearestBus[0][4]);
+    while (list.firstChild) {
+      list.removeChild(list.firstChild);
+    }
+    var createDiv= document.createElement("div");
+    createDiv.setAttribute("class", "busSquare");
+    createDiv.setAttribute("id", nearestBus[0][4]);
+    document.getElementById("results").appendChild(createDiv);
+
+    var crate_img = document.createElement("img");
+    crate_img.setAttribute("src", "images/busImage2.png");
+    //crate_img.setAttribute('marginleft', duetime * 15);
+    var marginLeftTest =  nearestBus[0][0] * 20 + "px";
+    console.log("testing margins " + marginLeftTest);
+    crate_img.style.marginLeft = marginLeftTest;
+    document.getElementById(  nearestBus[0][4]).appendChild(crate_img);
+
+
+    var elmnt = document.createElement("div");
+    elmnt.setAttribute("id",  nearestBus[0][4] + "text");
+    document.getElementById( nearestBus[0][4]).appendChild(elmnt);
+
+    if( nearestBus[0][1] == 0) {
+        document.getElementById( nearestBus[0][4] + "text").innerHTML = "Next " +
+        "<b>" + nearestBus[0][2] + "</b>" +
+        " bus is now <b>Due</b> from " +
+        "<b>" + nearestBus[0][3] + "</b>" + " / ";
+      }
+      else{
+      document.getElementById( nearestBus[0][4] + "text").innerHTML = "Next " +
+            "<b>" + nearestBus[0][2] + "</b>" +
+            "  bus  is due in " +
+            "<b>" + nearestBus[0][1]+ "</b>" +
+            " minutes from " +
+            "<b>" + nearestBus[0][3] + "</b>" + " / ";
+      }
+      
+
+
+
+    var a = document.createElement("a");
+    var linkText = document.createTextNode("For a full rundown ");
+    a.appendChild(linkText);
+    a.setAttribute("target", "_blank");
+    a.href = `https://www.dublinbus.ie/RTPI/Sources-of-Real-Time-Information/?searchtype=view&searchquery=${nearestBus[0][4]}`;
+    document.getElementById( nearestBus[0][4] + "text").appendChild(a);
+
+}
+
 
 
 
