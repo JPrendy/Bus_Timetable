@@ -124,8 +124,7 @@ window.onload = function() {
   document.getElementById("nearestBus").addEventListener("click", getLocation);
 
   //add a spinner in here then have a condition that removes it from when the fetched worked
-  var crate_img4 = document.createElement("img");
-  crate_img4.setAttribute("src", "images/loading.gif");
+  var crate_img4 = document.createElement("div");
   crate_img4.setAttribute("id", "loading");
   document.getElementById("results").appendChild(crate_img4);
   console.log(crate_img4);
