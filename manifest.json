@@ -1,0 +1,15 @@
+{
+    "name": "Bus Timetable",
+    "short_name": "MyBus",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#fff",
+    "description": "A test using Dublin Bus API to retrieve my bus routes and the closest bus to me",
+    "lang": "en-US",
+    "theme_color": "#edc202",
+      "icons": [{
+     "src": "images/BusImage2.png",
+     "sizes": "512x512",
+     "type": "image/png"
+   }]
+    }
