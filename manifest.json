@@ -8,7 +8,7 @@
     "lang": "en-US",
     "theme_color": "#edc202",
       "icons": [{
-     "src": "images/BusImage2.png",
+     "src": "images/busImage.png",
      "sizes": "512x512",
      "type": "image/png"
    }]

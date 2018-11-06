@@ -52,7 +52,7 @@ function StopNumber(stopidValue, routeNo, stopidName, lat, long) {
       document.getElementById("results").appendChild(createDiv);
 
       var crate_img = document.createElement("img");
-      crate_img.setAttribute("src", "images/busImage2.png");
+      crate_img.setAttribute("src", "images/busImage.png");
       //crate_img.setAttribute('marginleft', duetime * 15);
       var marginLeftTest = duetime * 20 + "px";
       console.log("testing margins " + marginLeftTest);
@@ -156,7 +156,7 @@ function nextBus() {
     document.getElementById("results").appendChild(createDiv);
 
     var crate_img = document.createElement("img");
-    crate_img.setAttribute("src", "images/busImage2.png");
+    crate_img.setAttribute("src", "images/busImage.png");
     //crate_img.setAttribute('marginleft', duetime * 15);
     var marginLeftTest =  BusTime[i][0] * 20 + "px";
     console.log("testing margins " + marginLeftTest);
@@ -240,7 +240,7 @@ function showPosition(position) {
     document.getElementById("results").appendChild(createDiv);
 
     var crate_img = document.createElement("img");
-    crate_img.setAttribute("src", "images/busImage2.png");
+    crate_img.setAttribute("src", "images/busImage.png");
     //crate_img.setAttribute('marginleft', duetime * 15);
     var marginLeftTest =  nearestBus[0][0] * 20 + "px";
     console.log("testing margins " + marginLeftTest);
