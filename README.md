@@ -3,15 +3,15 @@
 
 <p><strong>Screenshot One:</strong></p>
 <p align="center">
-  <img src="images/BusOne.png" width="500"/>
+  <img src="images/busOne.png" width="500"/>
 </p>
 
 <p><strong>Screenshot Two:</strong></p>
 <p align="center">
-  <img src="images/BusTwo.png" width="500"/>
+  <img src="images/busTwo.png" width="500"/>
 </p>
 
 <p><strong>Screenshot Three:</strong></p>
 <p align="center">
-  <img src="images/BusThree.png" width="500"/>
+  <img src="images/busThree.png" width="500"/>
 </p>
